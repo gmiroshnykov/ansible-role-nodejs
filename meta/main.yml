@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  author: George Miroshnykov
+  description: install Node.JS
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  categories:
+  - system
+  - web
