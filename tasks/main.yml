@@ -2,7 +2,6 @@
 - name: add 'chris-lea' PPA for Node.js
   sudo: true
   apt_repository: repo=ppa:chris-lea/node.js
-  register: result
 
 - name: install package
   sudo: true
