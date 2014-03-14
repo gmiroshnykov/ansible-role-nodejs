@@ -1,4 +1,8 @@
 ---
+- name: install python-pycurl
+  sudo: yes
+  apt: pkg=python-pycurl
+
 - name: add 'chris-lea' PPA for Node.js
   sudo: true
   apt_repository: repo=ppa:chris-lea/node.js
