@@ -25,3 +25,9 @@
     dest=/etc/profile.d/nodejs_path.sh
     mode=0644
   when: nodejs.add_node_modules_bin_to_path
+
+- name: Add forever-node upstart script
+  copy: src=forever-node.conf dest=/etc/init/forever-node.conf
+
+- name: Ensure nodeapp is started
+  action: service name=nodeapp state=started    
