@@ -46,7 +46,7 @@
           
           
 - name: Add forever-node upstart script
-  action: template src=forever-node.j2 dest=/etc/init/forever-node.conf
+  action: template src=forever-node.j2 dest=/etc/init/{{nodeapp_id}}.conf
 
 - name: Ensure {{nodeapp_id}} is started
   action: service name={{nodeapp_id}} state=started    
