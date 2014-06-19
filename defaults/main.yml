@@ -1,3 +1,9 @@
 nodejs:
   add_node_modules_bin_to_path: false
   npmrc: {}
+
+nodeapp_file: server.js          
+nodeapp_dir: /home/nodeapp
+nodeapp_id: nodeapp
+nodeapp_npm:
+        - forever 
