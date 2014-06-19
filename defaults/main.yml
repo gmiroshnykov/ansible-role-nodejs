@@ -3,5 +3,5 @@ nodejs:
   npmrc: {}
 
 nodeapp_file: server.js          
-nodeapp_dir: /var/www
+nodeapp_dir: /home/nodeapp
 nodeapp_id: nodeapp 

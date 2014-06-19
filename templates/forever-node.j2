@@ -42,8 +42,8 @@ expect fork
 # env SPIN_SLEEP_TIME="2000"
  
 env NODE_BIN_DIR="/usr/bin"
-env NODE_PATH="{{project_dir}}/node_modules"
-env APPLICATION_PATH="{{project_dir}}/server.js"
+env NODE_PATH="{{nodeapp_dir}}/node_modules"
+env APPLICATION_PATH="{{nodeapp_dir}}/{{nodeapp_file}}"
 env PIDFILE="/var/run/{{nodeapp_id}}.pid"
 env LOG="/var/log/{{nodeapp_id}}.log"
 env MIN_UPTIME="5000"
