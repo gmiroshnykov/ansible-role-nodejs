@@ -2,5 +2,6 @@ nodejs:
   add_node_modules_bin_to_path: false
   npmrc: {}
 
-project_dir: /var/www
+nodeapp_file: server.js          
+nodeapp_dir: /var/www
 nodeapp_id: nodeapp 
