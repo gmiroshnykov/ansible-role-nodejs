@@ -25,3 +25,29 @@
     dest=/etc/profile.d/nodejs_path.sh
     mode=0644
   when: nodejs.add_node_modules_bin_to_path
+
+- name: install required npm packages to keep node running
+  npm: name={{item}} global=yes 
+  with_items: nodeapp_npm
+        
+
+- name: Does {{nodeapp_dir}}/{{nodeapp_file}} exist?
+  command: ls {{nodeapp_dir}}/{{nodeapp_file}}
+  ignore_errors: yes
+  register: appexists
+
+- name: If App does not exist create directory       
+  command:  mkdir {{nodeapp_dir}}
+  when: appexists|failed        
+
+- name: If App does not exist copy default app into created directory       
+  copy: src={{nodeapp_file}} dest={{nodeapp_dir}}/{{nodeapp_file}}
+  when: appexists|failed        
+          
+          
+- name: Add forever-node upstart script
+  action: template src=forever-node.j2 dest=/etc/init/forever-node.conf
+
+- name: Ensure nodeapp is started
+  action: service name=nodeapp state=started    
+
