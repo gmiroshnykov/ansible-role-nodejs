@@ -26,8 +26,12 @@
     mode=0644
   when: nodejs.add_node_modules_bin_to_path
 
+- name: install forever to keep node running
+  npm: name=forever global=yes 
+
 - name: Add forever-node upstart script
-  copy: src=forever-node.conf dest=/etc/init/forever-node.conf
+  action: template src=forever-node.j2 dest=/etc/init/forever-node.conf
 
 - name: Ensure nodeapp is started
   action: service name=nodeapp state=started    
+
