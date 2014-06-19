@@ -26,8 +26,10 @@
     mode=0644
   when: nodejs.add_node_modules_bin_to_path
 
-- name: install forever to keep node running
-  npm: name=forever global=yes 
+- name: install required npm packages to keep node running
+  npm: name={{item}} global=yes 
+  with_items: nodeapp_npm
+        
 
 - name: Does {{nodeapp_dir}}/{{nodeapp_file}} exist?
   command: ls {{nodeapp_dir}}/{{nodeapp_file}}
