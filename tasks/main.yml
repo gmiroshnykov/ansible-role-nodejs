@@ -30,9 +30,8 @@
   npm: name={{item}} global=yes 
   with_items: nodeapp_npm
         
-
-- name: Does {{nodeapp_dir}}/{{nodeapp_file}} exist?
-  command: ls {{nodeapp_dir}}/{{nodeapp_file}}
+- name: Does {{nodeapp_chdir}}/{{nodeapp_dir}}/{{nodeapp_file}} exist?
+  command: ls {{nodeapp_chdir}}/{{nodeapp_dir}}/{{nodeapp_file}}
   ignore_errors: yes
   register: appexists
 

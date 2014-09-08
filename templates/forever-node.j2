@@ -59,6 +59,8 @@ script
     # someone makes an error in application initialization code, or bringing
     # down production servers the same way if a database or other critical
     # service suddenly becomes inaccessible.
+    {% if nodeapp_chdir is defined %}chdir {{ nodeapp_chdir }}{% endif %}
+
     exec forever \
       --pidFile $PIDFILE \
       -a \
