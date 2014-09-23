@@ -1,11 +1,29 @@
 ---
 - name: install python-pycurl
-  sudo: yes
+  sudo: true
   apt: pkg=python-pycurl
 
-- name: add 'chris-lea' PPA for Node.js
+- name: add nodesource apt key
   sudo: true
-  apt_repository: repo=ppa:chris-lea/node.js
+  apt_key: >
+    id=68576280
+    url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state=present
+
+- name: add nodesource apt repository
+  sudo: true
+  template: >
+    src=nodesource.list.j2
+    dest=/etc/apt/sources.list.d/nodesource.list
+    owner=root
+    group=root
+    mode=644
+  register: result
+
+- name: apt-get update
+  sudo: true
+  apt: update_cache=yes
+  when: result | changed
 
 - name: install package
   sudo: true
