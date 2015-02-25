@@ -8,6 +8,10 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - all
+  - name: Debian
+    versions:
+    - wheezy
   categories:
   - system
   - web
+dependencies: []
