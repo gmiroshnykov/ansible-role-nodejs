@@ -3,13 +3,15 @@
   sudo: yes
   apt: pkg=python-pycurl
 
-- name: add 'chris-lea' PPA for Node.js
-  sudo: true
-  apt_repository: repo=ppa:chris-lea/node.js
-
 - name: install package
   sudo: true
-  apt: pkg=nodejs
+  apt: pkg={{item}}
+  with_items:
+    - nodejs
+    - npm
+
+- name: fix nodejs binary path on ubuntu
+  file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
 
 - name: generate ~/.npmrc
   template: >
@@ -30,23 +32,21 @@
   npm: name={{item}} global=yes 
   with_items: nodeapp_npm
         
-- name: Does {{nodeapp_chdir}}/{{nodeapp_dir}}/{{nodeapp_file}} exist?
+- name: Does the nodejs application folder exist?
   command: ls {{nodeapp_chdir}}/{{nodeapp_dir}}/{{nodeapp_file}}
   ignore_errors: yes
   register: appexists
 
 - name: If App does not exist create directory       
-  command:  mkdir {{nodeapp_dir}}
+  file: path={{nodeapp_dir}} state=directory
   when: appexists|failed        
 
-- name: If App does not exist copy default app into created directory       
-  copy: src={{nodeapp_file}} dest={{nodeapp_dir}}/{{nodeapp_file}}
+- name: If nodejs app doest not exist in destination directory, make a soft link to it 
+  file: src={{nodeapp_file}} dest={{nodeapp_dir}}/{{nodeapp_file}} state=link
   when: appexists|failed        
-          
           
 - name: Add forever-node upstart script
-  action: template src=forever-node.j2 dest=/etc/init/{{nodeapp_id}}.conf
+  template: src=forever-node.j2 dest=/etc/init/{{nodeapp_id}}.conf
 
-- name: Ensure {{nodeapp_id}} is started
-  action: service name={{nodeapp_id}} state=started    
-
+- name: Ensure app is started
+  service: name={{nodeapp_id}} state=started    
