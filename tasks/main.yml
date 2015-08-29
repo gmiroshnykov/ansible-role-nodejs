@@ -6,38 +6,23 @@
   - python-pycurl
   - apt-transport-https
 
-- name: add nodesource apt key
+- name: add apt key
   sudo: true
   apt_key: >
-    id=68576280
+    id=0x68576280
     url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state=present
 
-- name: add nodesource apt repository
+- name: add apt repositories
   sudo: true
-  template: >
-    src=nodesource.list.j2
-    dest=/etc/apt/sources.list.d/nodesource.list
-    owner=root
-    group=root
-    mode=644
-  register: result
-
-- name: apt-get update
-  sudo: true
-  apt: update_cache=yes
-  when: result | changed
+  apt_repository: >
+    repo='{{ item }} https://deb.nodesource.com/node_0.10 trusty main'
+  with_items:
+    - deb
+    - deb-src
 
 - name: install package
   sudo: true
   apt: pkg=nodejs
-
-- name: generate ~/.npmrc
-  template: >
-    src=npmrc.j2
-    dest=~/.npmrc
-    mode=0644
-  when: nodejs.npmrc|length > 0
 
 - name: add `./node_modules/.bin` to PATH
   sudo: true
