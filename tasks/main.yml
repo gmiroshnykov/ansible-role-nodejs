@@ -4,16 +4,11 @@
   apt: pkg=python-pycurl
 
 - name: install node Repo
-#  sudo: true
-#  apt: pkg={{item}}
-#  with_items:
-#    - nodejs
-#    - npm
-  command: curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+  shell: curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 
 - name: install node
   sudo: true
-  apt: nodejs
+  apt: name=nodejs
 
 - name: fix nodejs binary path on ubuntu
   file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
@@ -33,25 +28,41 @@
     mode=0644
   when: nodejs.add_node_modules_bin_to_path
 
-- name: install required npm packages to keep node running
+- name: install required global npm packages
   npm: name={{item}} global=yes 
   with_items: nodeapp_npm
-        
+
 - name: Does the nodejs application folder exist?
-  command: ls {{nodeapp_chdir}}/{{nodeapp_dir}}/{{nodeapp_file}}
+  command: ls {{nodeapp_chdir}}{{item.dir}}/{{item.app}}
   ignore_errors: yes
+  with_items: "{{nodeapps}}"
   register: appexists
+  
 
 - name: If App does not exist create directory       
-  file: path={{nodeapp_dir}} state=directory
-  when: appexists|failed        
-
+  file: path={{item.dir}} state=directory
+  with_items: "{{nodeapps}}"
+  when: appexists|failed
+  
 - name: If nodejs app doest not exist in destination directory, make a soft link to it 
-  file: src={{nodeapp_file}} dest={{nodeapp_dir}}/{{nodeapp_file}} state=link
+  file: src={{item.app}} dest={{item.dir}}{{item.app}} state=link
+  with_items: "{{nodeapps}}"
+  ignore_errors: yes
   when: appexists|failed        
-          
-- name: Add forever-node upstart script
-  template: src=forever-node.j2 dest=/etc/init/{{nodeapp_id}}.conf
 
-- name: Ensure app is started
-  service: name={{nodeapp_id}} state=started    
+- name: create init.d files
+  shell: initd-forever -a {{item.dir}}{{item.app}} -n {{item.id}} -e {{node_env}}
+  with_items: "{{nodeapps}}"
+
+- name: Make new init.d files excutable
+  file: path={{item.id}} mode=0755
+  with_items: "{{nodeapps}}"
+
+- name: Move new init.d files to /etc/init.d 
+  command: mv {{item.id}} /etc/init.d/{{item.id}}
+  with_items: "{{nodeapps}}"
+
+- name: add new files to startup process 
+  command: update-rc.d {{item.id}} defaults 90
+  sudo: true
+  with_items: "{{nodeapps}}"

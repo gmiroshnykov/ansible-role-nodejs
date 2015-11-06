@@ -1,10 +1,12 @@
 nodejs:
   add_node_modules_bin_to_path: false
   npmrc: {}
-
-nodeapp_file: server.js          
+node_env: 'development'
 nodeapp_chdir: '/'
-nodeapp_dir: /home/nodeapp
-nodeapp_id: nodeapp
+
+nodeapps:
+  - { id: 'nodeapp', path: '/home/nodeapp/', app: 'server.js' }
+
 nodeapp_npm:
-  - forever 
+  - forever
+  - initd-forever 
