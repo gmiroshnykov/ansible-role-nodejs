@@ -3,12 +3,17 @@
   sudo: yes
   apt: pkg=python-pycurl
 
-- name: install package
+- name: install node Repo
+#  sudo: true
+#  apt: pkg={{item}}
+#  with_items:
+#    - nodejs
+#    - npm
+  command: curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+
+- name: install node
   sudo: true
-  apt: pkg={{item}}
-  with_items:
-    - nodejs
-    - npm
+  apt: nodejs
 
 - name: fix nodejs binary path on ubuntu
   file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
