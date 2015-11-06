@@ -3,6 +3,7 @@ nodejs:
   npmrc: {}
 
 nodeapp_file: server.js          
+nodeapp_chdir: '/'
 nodeapp_dir: /home/nodeapp
 nodeapp_id: nodeapp
 nodeapp_npm:
