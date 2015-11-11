@@ -29,7 +29,7 @@
   when: nodejs.add_node_modules_bin_to_path
 
 - name: install required global npm packages
-  npm: name={{item}} global=yes 
+  npm: name={{item}} global=yes
   with_items: nodeapp_npm
 
 - name: Does the nodejs application folder exist?
@@ -39,16 +39,27 @@
   register: appexists
   
 
-- name: If App does not exist create directory       
+- name: If App does not exist create directory
   file: path={{item.dir}} state=directory
   with_items: "{{nodeapps}}"
   when: appexists|failed
   
-- name: If nodejs app doest not exist in destination directory, make a soft link to it 
+- name: If nodejs app doesn't not exist in destination directory, make a soft link to server.js
   file: src={{item.app}} dest={{item.dir}}{{item.app}} state=link
   with_items: "{{nodeapps}}"
   ignore_errors: yes
-  when: appexists|failed        
+  when: appexists|failed
+  
+- name: If nodejs app doest not exist in destination directory, make a soft link to package.json
+  file: src=package.json dest={{item.dir}}{{item.app}} state=link
+  with_items: "{{nodeapps}}"
+  ignore_errors: yes
+  when: appexists|failed
+  
+- name: Install Node applications packages.json
+  npm: path={{ item.dir }}
+  with_items:
+  - "{{nodeapps}}"
 
 - name: create init.d files
   shell: initd-forever -a {{item.dir}}{{item.app}} -n {{item.id}} -e {{node_env}}
@@ -58,11 +69,11 @@
   file: path={{item.id}} mode=0755
   with_items: "{{nodeapps}}"
 
-- name: Move new init.d files to /etc/init.d 
+- name: Move new init.d files to /etc/init.d
   command: mv {{item.id}} /etc/init.d/{{item.id}}
   with_items: "{{nodeapps}}"
 
-- name: add new files to startup process 
+- name: add new files to startup process
   command: update-rc.d {{item.id}} defaults 90
   sudo: true
   with_items: "{{nodeapps}}"
