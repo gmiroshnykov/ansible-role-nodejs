@@ -1,5 +1,5 @@
-#nodejs, Forever, upstart
-========================
+#nodejs - forever - initd-forever
+================================
 
 An Ansible role that installs nodejs and runs default or your application on Ubuntu 12.04 - 15.10
 
