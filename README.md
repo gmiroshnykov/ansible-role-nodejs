@@ -16,22 +16,21 @@ Available variables are listed below, along with default values:
 ####Default Node.js bin path
 nodejs:
   add_node_modules_bin_to_path: false
-  npm####: {}
+  npm: {}
 
-####When c####ange when deploying to production
+####Change when deploying to production
 node_env: 'development'
 
-####Default####root
+####Default root
 nodeapp_chdir: '/'
 
-####Default Hell#### world app that comes with role, add your own apps here
+####Default Hello world app that comes with role, add your own apps here
 nodeapps:
   - { id: 'nodeapp', path: '/home/nodeapp/', app: 'server.js' }
 
 ####Required global packages to create and run base application feel free to add your own packages here
 nodeapp_npm:
-
-#### forever
+  - forever
   - initd-forever
 
 
