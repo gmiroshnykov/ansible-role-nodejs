@@ -1,9 +1,9 @@
 ---
 galaxy_info:
-  author: George Miroshnykov
-  description: install Node.JS
+  author: Valentin Backofen
+  description: install and run Node.JS
   min_ansible_version: 1.4
-  version: 0.1.0
+  version: 0.2.0
   platforms:
   - name: Ubuntu
     versions:
@@ -11,3 +11,4 @@ galaxy_info:
   categories:
   - system
   - web
+  license: MIT
