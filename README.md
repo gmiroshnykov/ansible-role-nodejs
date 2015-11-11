@@ -1,12 +1,11 @@
-nodejs, Forever, upstart
+#nodejs, Forever, upstart
 ========================
-# README.md
 
 An Ansible role that installs nodejs and runs default or your application on Ubuntu 12.04 - 15.10
 
-- Added npm install of forever (more packages can be added in vars/default
-- NodeJS is added as service allowing you to service start|stop it
-- if the node app as defined in vars(defaults) does not exist a simple server.js is put in it's place
+- If you just want to test Node, this role got you covered, it comes with a simple Hello World app
+- NodeJS is added as service (using NPM packages) allowing you to service start|stop it
+
 
 
 #### Role Variables
